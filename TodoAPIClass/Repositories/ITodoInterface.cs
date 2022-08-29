@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TodoAPIClass.Models;
+using TodoAPIClass.ViewModel;
 
 namespace TodoAPIClass.Repositories
 {
@@ -7,8 +8,8 @@ namespace TodoAPIClass.Repositories
     {
         List<Todo> GetTodos();
         Todo GetTodo(long Id);
-        ResponseModel SaveTodo(Todo todo);
+        ResponseModel SaveTodo(TodoModel todo);
         ResponseModel DeleteTodo(long id);
-        ResponseModel UpdateTodo(Todo todo);
+        ResponseModel UpdateTodo(TodoModel todo);
     }
 }

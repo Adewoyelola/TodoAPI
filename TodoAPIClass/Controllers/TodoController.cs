@@ -3,6 +3,7 @@ using System.Linq;
 using TodoAPIClass.MockData;
 using TodoAPIClass.Models;
 using TodoAPIClass.Repositories;
+using TodoAPIClass.ViewModel;
 
 namespace TodoAPIClass.Controllers
 {
@@ -43,10 +44,28 @@ namespace TodoAPIClass.Controllers
         }
 
         [HttpPost("createtodo")]
-        public IActionResult SaveNewTodo([FromBody]Todo todo)
+        public IActionResult SaveNewTodo([FromBody] TodoModel todo)
         {
             if (!ModelState.IsValid) { return BadRequest("Check to ensure your input follows the right pattern and data type"); }
             var create = _todoInterface.SaveTodo(todo);
+            if (create.IsSuccess == true)
+            {
+                return Ok(create);
+            }
+            return BadRequest();
+        }
+        [HttpDelete("{id}")]
+        public IActionResult DeleteTodo(long id)
+        {
+            var deletetodo = _todoInterface.DeleteTodo(id);
+            return Ok(deletetodo);
+        }
+
+        [HttpPatch("updatetodo")]
+        public IActionResult UpdateExistingTodo([FromBody] TodoModel todo)
+        {
+            if (!ModelState.IsValid) { return BadRequest("Check to ensure your input follows the right pattern and data type"); }
+            var create = _todoInterface.UpdateTodo(todo);
             if (create.IsSuccess == true)
             {
                 return Ok(create);

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TodoAPIClass.Models;
+using TodoAPIClass.ViewModel;
 
 namespace TodoAPIClass.Repositories
 {
@@ -17,7 +18,7 @@ namespace TodoAPIClass.Repositories
             var todoExist = GetTodo(id);
             if(todoExist != null)
             {
-                _dbContext.Remove(todoExist);
+                todoExist.IsDeleted = true;
                 _dbContext.SaveChanges();
 
                 responseModel.IsSuccess = true;
@@ -33,18 +34,22 @@ namespace TodoAPIClass.Repositories
 
         public Todo GetTodo(long Id)
         {
-            var todo = _dbContext.Set<Todo>().FirstOrDefault(x => x.Id == Id);
-            return todo;
+            var todo = _dbContext.Set<Todo>().Where(t=>t.IsDeleted==false).FirstOrDefault(x => x.Id == Id);
+            if(todo != null)
+            {
+                return todo;
+            }
+            return null;
         }
 
         public List<Todo> GetTodos()
         {
-            var todos = _dbContext.Set<Todo>().ToList();
+            var todos = _dbContext.Set<Todo>().Where(t=>t.IsDeleted == false).ToList();
 
             return todos;
         }
 
-        public ResponseModel SaveTodo(Todo todo)
+        public ResponseModel SaveTodo(TodoModel todo)
         {
             ResponseModel responseModel= new ResponseModel();
             var exists= _dbContext.Set<Todo>()
@@ -59,16 +64,41 @@ namespace TodoAPIClass.Repositories
             }
             else
             {
-                _dbContext.Add(todo);
+                var createtodo = new Todo
+                {
+                    Description = todo.Description,
+                    IsCompleted = todo.IsCompleted,
+                    Name=todo.Name
+                };
+                _dbContext.Add(createtodo);
                 _dbContext.SaveChanges();
                 responseModel.IsSuccess = true;
             }
             return responseModel;
         }
 
-        public ResponseModel UpdateTodo(Todo todo)
+        public ResponseModel UpdateTodo(TodoModel todo)
         {
-            throw new System.NotImplementedException();
+            ResponseModel responseModel = new ResponseModel();
+            var exists = _dbContext.Set<Todo>().Where(t => t.Id == todo.Id).FirstOrDefault();
+            if(exists != null)
+            {
+                
+                
+                    exists.Description = todo.Description;
+                    exists.IsCompleted = todo.IsCompleted;
+                    exists.Name = todo.Name;                    
+
+                    _dbContext.SaveChanges();
+                    responseModel.IsSuccess = true;
+            }
+            else
+            {
+                responseModel.IsSuccess=false;
+                responseModel.Message = "This todo does not exist or has been deleted";
+            }
+
+            return responseModel;
         }
     }
 }
