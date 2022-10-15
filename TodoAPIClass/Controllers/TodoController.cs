@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using TodoAPIClass.MockData;
 using TodoAPIClass.Models;
@@ -7,6 +8,7 @@ using TodoAPIClass.ViewModel;
 
 namespace TodoAPIClass.Controllers
 {
+    [Authorize]
     public class TodoController : ControllerBase
     {
         //CRUD

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TodoAPIClass.Models;
 using TodoAPIClass.ViewModel;
@@ -46,6 +47,7 @@ namespace TodoAPIClass.Repositories
         {
             var todos = _dbContext.Set<Todo>().Where(t=>t.IsDeleted == false).ToList();
 
+            Console.WriteLine(todos);
             return todos;
         }
 

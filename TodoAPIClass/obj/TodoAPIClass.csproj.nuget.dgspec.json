@@ -44,6 +44,30 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "dependencies": {
+            "Hangfire.AspNetCore": {
+              "target": "Package",
+              "version": "[1.7.31, )"
+            },
+            "Hangfire.Core": {
+              "target": "Package",
+              "version": "[1.7.31, )"
+            },
+            "Hangfire.SqlServer": {
+              "target": "Package",
+              "version": "[1.7.31, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[3.1.8, )"
@@ -57,6 +81,10 @@
             "Microsoft.Extensions.Configuration": {
               "target": "Package",
               "version": "[3.1.8, )"
+            },
+            "Serilog": {
+              "target": "Package",
+              "version": "[2.11.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

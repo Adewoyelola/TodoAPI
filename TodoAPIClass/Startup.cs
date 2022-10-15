@@ -13,6 +13,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TodoAPIClass.Repositories;
+using Hangfire;
+using Hangfire.SqlServer;
+using TodoAPIClass.MiddleWare;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace TodoAPIClass
 {
@@ -31,6 +37,8 @@ namespace TodoAPIClass
             services.AddScoped<ITodoInterface, TodoRepository>();
 
             services.AddDbContext<TodoDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Con_Str")));
+           
+           
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddSwaggerGen(c =>
@@ -42,6 +50,29 @@ namespace TodoAPIClass
                     Description = "A simple example to implement Swagger UI",
                 });
 
+            });
+
+            //add authenticationm
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+
+            //adding jwt bearer
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["JWT:ValidAudience"],
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                };
             });
         }
 
@@ -56,12 +87,14 @@ namespace TodoAPIClass
             app.UseHttpsRedirection();
 
             app.UseRouting();
+          
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Showing API V1");
             });
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

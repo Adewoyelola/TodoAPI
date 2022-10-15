@@ -1,16 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TodoAPIClass.Models;
 
 namespace TodoAPIClass
 {
-    public class TodoDBContext:DbContext
+    public class TodoDBContext:IdentityDbContext<User>
     {
         public TodoDBContext(DbContextOptions options):base(options)
         {
 
         }
-        DbSet<Todo> Todos { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
 
+        }
+
+
+        DbSet<Todo> Todos { get; set; }
 
     }
 }
