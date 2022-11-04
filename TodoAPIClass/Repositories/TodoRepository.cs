@@ -9,9 +9,11 @@ namespace TodoAPIClass.Repositories
     public class TodoRepository : ITodoInterface
     {
         private TodoDBContext _dbContext;
-        public TodoRepository(TodoDBContext dbContext)
+        private readonly IPaymentRepository _paymentRepo;
+        public TodoRepository(TodoDBContext dbContext, IPaymentRepository paymentRepo)
         {
             _dbContext = dbContext;
+            _paymentRepo = paymentRepo;
         }
         public ResponseModel DeleteTodo(long id)
         {
@@ -66,6 +68,27 @@ namespace TodoAPIClass.Repositories
             }
             else
             {
+                var rand = new Random();
+                int randnum = rand.Next(10000);
+                var tx_ref= $"Flight-{randnum}-{DateTime.Now}";
+
+                var sendtoPaymentData = new PaymentRequestModel()
+                {
+                    amount = todo.amount,
+                    currency = "NGN",
+                    customer = new Customer()
+                    {
+                        email = todo.email,
+                        name = todo.name,
+                        phonenumber = todo.phoneNumber
+                    },
+                    redirect_url="https://localhost:5001",
+                    tx_ref= tx_ref
+                   
+                };
+                var request =   _paymentRepo.InitiatePayment(sendtoPaymentData).Result;
+
+
                 var createtodo = new Todo
                 {
                     Description = todo.Description,
@@ -75,6 +98,7 @@ namespace TodoAPIClass.Repositories
                 _dbContext.Add(createtodo);
                 _dbContext.SaveChanges();
                 responseModel.IsSuccess = true;
+                responseModel.Message = request.data.link;
             }
             return responseModel;
         }

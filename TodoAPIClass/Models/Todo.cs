@@ -8,5 +8,7 @@
         public bool IsCompleted { get; set; }
         public bool IsDeleted { get; set; } = false;
 
+
+       
     }
 }

@@ -4,6 +4,7 @@
     <Controller_SelectedScaffolderID>MvcControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/MVC/Controller</Controller_SelectedScaffolderCategoryPath>
     <ActiveDebugProfile>TodoAPIClass</ActiveDebugProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\Cyberspace\source\repos\Waluretraining\TodoAPIClass\TodoAPIClass\Properties\PublishProfiles\TodoAPIClass - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>

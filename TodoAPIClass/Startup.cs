@@ -35,6 +35,7 @@ namespace TodoAPIClass
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ITodoInterface, TodoRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
 
             services.AddDbContext<TodoDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Con_Str")));
            
